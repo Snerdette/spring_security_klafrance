@@ -1,0 +1,66 @@
+<html>
+<head>
+<title>Employee Index</title>
+<link type="text/css" rel="stylesheet" href="http://getbootstrap.com/dist/css/bootstrap.css" />
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(
+            function() {
+                $.ajax({
+                    url : '/employees',
+                    method : 'GET'
+                }).then(
+                        function(employees) {
+                            for (var i = 0; i < employees.length; i++) {
+                                var employee = employees[i];
+                                var row = "<tr><td>" + employee.employeeId
+                                        + "</td><td>" + employee.firstname
+                                        + "</td><td>" + employee.lastname
+                                        + "</td><td>" + employee.username 
+                                        + "</td><td>" + employee.age
+                                        + "</td><td>" + employee.active
+                                        + "</td></tr>";
+                                $("#result").append(row);
+                            }
+                        });
+            });
+</script>
+</head>
+<body>
+     <h1>Employee Index</h1>
+     <div class="navbar">
+
+          <div>
+               <a href="/employee/index">Employee Index</a>
+          </div>
+          <div>
+               <a href="/employee/create">Employee Create</a>
+          </div>
+          <div>
+               <a href="/employee/update">Employee Update</a>
+          </div>
+          <div>
+               <a href="/employee/delete">Employee Delete</a>
+          </div>
+
+          <div>
+               <a href="/logout"> Logout</a>
+          </div>
+     </div>
+
+
+
+     <table id="result" class="table-bordered">
+          <tr>
+               <th>employee id</th>
+               <th>firstname</th>
+               <th>lastname</th>
+               <th>username</th>
+               <th>Age</th>
+               <th>Is Active</th>
+          </tr>
+
+     </table>
+</body>
+</html>

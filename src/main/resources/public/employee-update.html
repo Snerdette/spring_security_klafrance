@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Employee Update</title>
+<link type="text/css" rel="stylesheet" href="http://getbootstrap.com/dist/css/bootstrap.css" />
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script type="text/javascript">
+$(document).ready(
+        function() {
+            $.ajax({
+                    url: '/employees',
+                    method: 'GET'
+                })
+                .then(
+                    function(employees) {
+                        for (var i = 0; i < employees.length; i++) {
+                            var employee = employees[i];
+                            var row = '<option value="' + employee.employeeId + '">' + employee.lastname + ', ' + employee.firstname + '</option>';
+                            $("#employees").append(row);
+                        }
+                    });
+
+            $("#employees").change(function() {
+
+                $.ajax({
+                    url: '/employees/' + $("#employees").val(),
+                    method: 'GET'
+                }).then(function(employee) {
+                    $("#employeeId").val(employee.employeeId);
+                    $("#firstname").val(employee.firstname);
+                    $("#lastname").val(employee.lastname);
+                    $("#age").val(employee.age);
+                    $("#active").val(employee.active.toString());
+                    $("#username").val(employee.username);
+                    $("#password").val(employee.password);
+
+                    //window.location.href = "/employee/index";
+                }, function(errors) {
+
+                });
+
+            });
+
+            $("#submit").click(function() {
+
+                var employee = {};
+                employee.employeeId = $("#employeeId").val();
+                employee.firstname = $("#firstname").val();
+                employee.lastname = $("#lastname").val();
+                employee.age = $("#age").val();
+                employee.active = $("#active").val();
+                employee.username = $("#username").val();
+                employee.password = $("#password").val();
+
+                $.ajax({
+                    url: '/employees/' + employee.employeeId,
+                    method: 'PUT',
+                    data: JSON.stringify(employee),
+                    contentType: 'application/JSON'
+                }).then(function() {
+                    window.location.href = "/employee/index";
+                }, function(errors) {
+
+                });
+            }); });
+</script>
+</head>
+<body>
+     <h1>Employee Update</h1>
+     <div class="navbar">
+
+          <div>
+               <a href="/employee/index">Employee Index</a>
+          </div>
+          <div>
+               <a href="/employee/create">Employee Create</a>
+          </div>
+          <div>
+               <a href="/employee/update">Employee Update</a>
+          </div>
+          <div>
+               <a href="/employee/delete">Employee Delete</a>
+          </div>
+          <div>
+               <a href="/logout"> Logout</a>
+          </div>
+     </div>
+
+     <div class="container">
+
+          <div id="errorMsgs" class="error"></div>
+
+          <div>
+               <select id="employees">
+                    <option>Select an Employee</option>
+               </select>
+          </div>
+          <div>
+               <div>
+                    <label for="employeeId">EmployeeId</label>
+                    <input id="employeeId" type="text" readonly value="" />
+               </div>
+               <div>
+                    <label for="firstname">firstname</label>
+                    <input id="firstname" type="text" value="" />
+               </div>
+               <div>
+                    <label for="lastname">lastname</label>
+                    <input id="lastname" type="text" value="" />
+               </div>
+               <div>
+                    <label for="age">age</label>
+                    <input id="age" type="text" value="" />
+               </div>
+               <div>
+                    <label for="username">Username: </label>
+                    <input id="username" type="text" value="" />
+               </div>
+               <div>
+                    <label for="password">Password: </label>
+                    <input id="password" type="password" value="" />
+               </div>
+               <div>
+                    <label for="active">Is active?:</label>
+                    <select id="active">
+                         <option value="true">True</option>
+                         <option value="false">False</option>
+                    </select>
+               </div>
+               <div>
+
+
+                    <button id="submit" type="button">Submit</button>
+               </div>
+          </div>
+     </div>
+
+</body>
+</html>

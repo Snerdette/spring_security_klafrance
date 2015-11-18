@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Employee Delete</title>
+<link type="text/css" rel="stylesheet" href="http://getbootstrap.com/dist/css/bootstrap.css" />
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script type="text/javascript">
+    $(document)
+            .ready(
+                    function() {
+                        $
+                                .ajax({
+                                    url : '/employees',
+                                    method : 'GET'
+                                })
+                                .then(
+                                        function(employees) {
+                                            for (var i = 0; i < employees.length; i++) {
+                                                var employee = employees[i];
+                                                var row = '<option value="' + employee.employeeId + '">'
+                                                        + employee.lastname
+                                                        + ', '
+                                                        + employee.firstname
+                                                        + '</option>';
+                                                $("#employees").append(row);
+                                            }
+                                        });
+
+                        $("#removeBtn").click(function() {
+                            $.ajax({
+                                url : '/employees/' + $("#employees").val(),
+                                method : 'DELETE'
+                            }).then(function() {
+                                window.location.href = "/employee/index";
+                            }, function(errors) {
+
+                            });
+                        });
+                    });
+</script>
+</head>
+<body>
+     <h1>Employee Delete</h1>
+     <div class="navbar">
+
+          <div>
+               <a href="/employee/index">Employee Index</a>
+          </div>
+          <div>
+               <a href="/employee/create">Employee Create</a>
+          </div>
+          <div>
+               <a href="/employee/update">Employee Update</a>
+          </div>
+          <div>
+               <a href="/employee/delete">Employee Delete</a>
+          </div>
+          <div>
+               <a href="/logout"> Logout</a>
+          </div>
+     </div>
+
+     <div class="container">
+          <div id="errorMsgs" class="error"></div>
+
+          <select id="employees">
+               <option>Select an Employee</option>
+          </select>
+          <button id="removeBtn" type="button">Remove</button>
+     </div>
+</body>
+</html>
